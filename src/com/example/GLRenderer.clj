@@ -69,7 +69,6 @@
   )
 )
 
-
 (defn initShapes []
   (let [triangleCoords (into-array Float/TYPE '(-0.5 -0.25 0 0.5 -0.25 0 0.0 0.559016994 0))
         vbb            (java.nio.ByteBuffer/allocateDirect (* 4 9))
