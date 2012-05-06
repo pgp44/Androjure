@@ -70,7 +70,7 @@
   )
 )
 
-(defn initShapes []
+(def initShapes
   (let [triangleCoords (into-array Float/TYPE '(-0.5 -0.25 0 0.5 -0.25 0 0.0 0.559016994 0))
         vbb            (java.nio.ByteBuffer/allocateDirect (* 4 9))
         d1             (.order vbb (java.nio.ByteOrder/nativeOrder))
@@ -87,7 +87,7 @@
     (do
       (android.opengl.GLES20/glClear (bit-or android.opengl.GLES20/GL_COLOR_BUFFER_BIT android.opengl.GLES20/GL_DEPTH_BUFFER_BIT))
       (android.opengl.GLES20/glUseProgram (:program @(.state this)) )
-      (android.opengl.GLES20/glVertexAttribPointer (:maPositionHandle @(.state this)) 3 android.opengl.GLES20/GL_FLOAT false 12 (initShapes))
+      (android.opengl.GLES20/glVertexAttribPointer (:maPositionHandle @(.state this)) 3 android.opengl.GLES20/GL_FLOAT false 12 initShapes)
       (android.opengl.GLES20/glEnableVertexAttribArray (:maPositionHandle @(.state this)))
       (android.opengl.Matrix/multiplyMM mMVPMatrix 0 (:mProjMatrix @(.state this)) 0 (:mVMatrix @(.state this)) 0)
       (android.opengl.Matrix/setRotateM mMMatrix 0 (:mAngle @(.state this)) 0 0 1.0)

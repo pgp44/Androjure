@@ -40,8 +40,8 @@
           (let [
             dx1 (- x mPreviousX)
             dy1 (- y mPreviousY)
-            dx (if (> y height) (- dx1) dx1 )
-            dy (if (> x width)  (- dy1) dy1 )
+            dx (if (> y (/ height 2)) (- dx1) dx1 )
+            dy (if (< x (/ width 2))  (- dy1) dy1 )
             prevAngle (:mAngle @(.state (:renderer @(.state this))))
             deltaAngle (* touch-scale-factor (+ dx dy))
             newAngle (+ prevAngle deltaAngle)
