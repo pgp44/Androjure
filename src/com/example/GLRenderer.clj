@@ -1,3 +1,4 @@
+;
 (ns com.example.GLRenderer
   (:gen-class :implements [android.opengl.GLSurfaceView$Renderer]
               :state state
