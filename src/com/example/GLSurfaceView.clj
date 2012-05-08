@@ -35,6 +35,7 @@
       width       (.getWidth this)
       ]
     (do
+      (android.util.Log/i "onTouchEvent" "enter")
       (cond
         (= android.view.MotionEvent/ACTION_MOVE action)
           (let [
@@ -42,18 +43,22 @@
             dy1 (- y mPreviousY)
             dx (if (> y (/ height 2)) (- dx1) dx1 )
             dy (if (< x (/ width 2))  (- dy1) dy1 )
+            dbg (android.util.Log/i "onTouchEvent" "dx and dy calculated")
             prevAngle (:mAngle @(.state (:renderer @(.state this))))
             deltaAngle (* touch-scale-factor (+ dx dy))
             newAngle (+ prevAngle deltaAngle)
-            dgb (android.util.Log/i "onTouchEvent" "touched")
+            dbg2 (android.util.Log/i "onTouchEvent" "newAngle calculated")
             ]
             (do
               (reset! (.state (:renderer @(.state this))) (merge @(.state (:renderer @(.state this))) {:mAngle newAngle} ))
-              (.requestRender this)
-            )
+              (android.util.Log/i "onTouchEvent" "newAngle set")
+              ;(.requestRender this)
+              (android.util.Log/i "onTouchEvent" "requestRender called")
+              )
           )
       )
       (reset! (.state this) (merge @(.state this) {:mPreviousX x :mPreviousY y}))
+      (android.util.Log/i "onTouchEvent" "exit")
       true
     )
   )
