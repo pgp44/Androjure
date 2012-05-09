@@ -5,15 +5,17 @@
               :init init
               :post-init initRenderer
               :main false)
-  (:import  [android.util.Log] [android.opengl.GLSurfaceView])
+  (:import  (android.opengl GLES20 GLSurfaceView) (android util.Log) )
 )
+
+(set! *warn-on-reflection* true)
 
 (defn -init []
   [[] (atom {:program nil})]
   )
 
 (defn -initRenderer [this]
-  (reset! (.state this) {:mAngle (float 0)})
+  (reset! (.state ^com.example.GLRenderer this) {:mAngle (float 0)})
 )
 
 (def vertexShaderCode
@@ -42,7 +44,7 @@
 )
 
 
-(defn -onSurfaceCreated [this GL10_unused config]
+(defn -onSurfaceCreated [^com.example.GLRenderer this GL10_unused config]
   (do
     (android.opengl.GLES20/glClearColor 0.3 0.3 0.3 1.0)
     (reset! (.state this) (merge @(.state this) {:program  (android.opengl.GLES20/glCreateProgram)}))
@@ -55,7 +57,7 @@
   )
 )
 
-(defn -onSurfaceChanged [this GL10_unused width height]
+(defn -onSurfaceChanged [^com.example.GLRenderer this GL10_unused width height]
   (let [mProjMatrix (float-array 16) mVMatrix (float-array 16) ratio (float (/ width height))]
     (do
       (android.opengl.GLES20/glViewport 0 0 width height)
@@ -75,7 +77,7 @@
         vbb            (java.nio.ByteBuffer/allocateDirect (* 4 9))
         d1             (.order vbb (java.nio.ByteOrder/nativeOrder))
         triangleVertex (.asFloatBuffer vbb)
-        d2             (.put triangleVertex triangleCoords)
+        d2             (.put ^java.nio.FloatBuffer triangleVertex ^floats triangleCoords)
         d3             (.position triangleVertex 0)
         ]
    triangleVertex
@@ -91,7 +93,7 @@
 (defn multiplyMM [] (fn [#^floats result #^Integer resultOffset #^floats lhs #^Integer lhsOffset #^floats rhs #^Integer rhsOffset] (android.opengl.Matrix/multiplyMM result resultOffset lhs lhsOffset rhs rhsOffset)))
 (defn setRotateM [] (fn [#^floats rm #^Integer rmOffset #^Float a #^Float x #^Float y #^Float z] (android.opengl.Matrix/setRotateM rm rmOffset a x y z)))
 
-(defn -onDrawFrame [this GL10_unused]
+(defn -onDrawFrame [^com.example.GLRenderer this GL10_unused]
   (let [mMVPMatrix (float-array 16) mMMatrix (float-array 16)]
     (do
       ((glClear) (bit-or android.opengl.GLES20/GL_COLOR_BUFFER_BIT android.opengl.GLES20/GL_DEPTH_BUFFER_BIT))

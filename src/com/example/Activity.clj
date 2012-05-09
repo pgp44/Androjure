@@ -2,7 +2,7 @@
   (:gen-class :extends android.app.Activity
               :main false
               :exposes-methods {onCreate superOnCreate})
-  (:import  [android.util.Log] [android.opengl.GLSurfaceView])
+  (:import  [android.util.Log] [com.example.GLSurfaceView] [android.opengl.GLSurfaceView])
 )
 
 (defn -onCreate
@@ -10,6 +10,6 @@
   [this bundle]
   (do
     (.superOnCreate this bundle)
-    (.setContentView this (com.example.GLSurfaceView. this))
+     (.setContentView this (com.example.GLSurfaceView. this))
   )
 )

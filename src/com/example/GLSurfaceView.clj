@@ -9,6 +9,8 @@
   (:import  [android.util.Log] [android.opengl.GLSurfaceView])
   )
 
+(set! *warn-on-reflection* true)
+
 (def touch-scale-factor (float (/ 180.0 320)))
 
 
@@ -18,13 +20,13 @@
 
 (defn -initGl [this context]
   (do
-    (.setEGLContextClientVersion this 2)
-    (reset! (.state this) {:renderer (com.example.GLRenderer.)})
-    (.setRenderer this (:renderer @(.state this)))
+    (.setEGLContextClientVersion ^com.example.GLSurfaceView this 2)
+    (reset! (.state ^com.example.GLSurfaceView this) {:renderer (com.example.GLRenderer.)})
+    (.setRenderer ^com.example.GLSurfaceView this (:renderer @(.state ^com.example.GLSurfaceView this)))
   )
 )
 
-(defn -onTouchEvent [this e]
+(defn -onTouchEvent [^com.example.GLSurfaceView this #^android.view.MotionEvent e]
   ( let [
       x           (.getX e)
       y           (.getY e)
@@ -44,15 +46,15 @@
             dx (if (> y (/ height 2)) (- dx1) dx1 )
             dy (if (< x (/ width 2))  (- dy1) dy1 )
             dbg (android.util.Log/i "onTouchEvent" "dx and dy calculated")
-            prevAngle (:mAngle @(.state (:renderer @(.state this))))
+            prevAngle (:mAngle @(.state ^com.example.GLRenderer (:renderer @(.state ^com.example.GLSurfaceView this))))
             deltaAngle (* touch-scale-factor (+ dx dy))
             newAngle (+ prevAngle deltaAngle)
             dbg2 (android.util.Log/i "onTouchEvent" "newAngle calculated")
             ]
             (do
-              (reset! (.state (:renderer @(.state this))) (merge @(.state (:renderer @(.state this))) {:mAngle newAngle} ))
+              (reset! (.state ^com.example.GLRenderer (:renderer @(.state this))) (merge @(.state ^com.example.GLRenderer  (:renderer @(.state this))) {:mAngle newAngle} ))
               (android.util.Log/i "onTouchEvent" "newAngle set")
-              ;(.requestRender this)
+              (.requestRender ^com.example.GLSurfaceView this)
               (android.util.Log/i "onTouchEvent" "requestRender called")
               )
           )
