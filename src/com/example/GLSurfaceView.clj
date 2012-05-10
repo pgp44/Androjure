@@ -13,7 +13,7 @@
 
 (def touch-scale-factor (float (/ 180.0 320)))
 
-
+                                                               `
 (defn -init [context]
   [[context] (atom {:renderer nil :mPreviousX 0 :mPreviousY 0})]
 )
